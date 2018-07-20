@@ -24,4 +24,12 @@ describe('RadixSort', () => {
       ARRAY_OF_INTEGERS_VISIT_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(RadixSort, true);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(RadixSort, true);
+  });
 });

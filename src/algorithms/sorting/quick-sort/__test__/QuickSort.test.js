@@ -61,4 +61,16 @@ describe('QuickSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(QuickSort);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(QuickSort);
+  });
+
+  it('should be stable [property]', () => {
+    SortTester.testPropertyStability(QuickSort);
+  });
 });

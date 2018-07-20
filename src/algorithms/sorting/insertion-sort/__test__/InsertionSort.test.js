@@ -61,4 +61,16 @@ describe('InsertionSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(InsertionSort);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(InsertionSort);
+  });
+
+  it('should be stable [property]', () => {
+    SortTester.testPropertyStability(InsertionSort);
+  });
 });

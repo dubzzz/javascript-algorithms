@@ -61,4 +61,16 @@ describe('BubbleSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(BubbleSort);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(BubbleSort);
+  });
+
+  it('should be stable [property]', () => {
+    SortTester.testPropertyStability(BubbleSort);
+  });
 });

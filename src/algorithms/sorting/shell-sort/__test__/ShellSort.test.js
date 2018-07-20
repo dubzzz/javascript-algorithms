@@ -57,4 +57,12 @@ describe('ShellSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(ShellSort);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(ShellSort);
+  });
 });

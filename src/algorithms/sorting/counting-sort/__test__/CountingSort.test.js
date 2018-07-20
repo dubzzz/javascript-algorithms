@@ -66,4 +66,12 @@ describe('CountingSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(CountingSort, true);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(CountingSort, true);
+  });
 });

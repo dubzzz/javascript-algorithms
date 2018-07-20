@@ -61,4 +61,16 @@ describe('MergeSort', () => {
       REVERSE_SORTED_ARRAY_VISITING_COUNT,
     );
   });
+
+  it('should contain the same items [property]', () => {
+    SortTester.testPropertyKeepTheSameItems(MergeSort);
+  });
+
+  it('should produce ordered array [property]', () => {
+    SortTester.testPropertyOrderedArray(MergeSort);
+  });
+
+  it('should be stable [property]', () => {
+    SortTester.testPropertyStability(MergeSort);
+  });
 });

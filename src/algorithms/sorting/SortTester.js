@@ -1,3 +1,5 @@
+import * as fc from 'fast-check';
+
 export const sortedArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 export const reverseArr = [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 export const notSortedArr = [15, 8, 5, 12, 10, 1, 16, 9, 11, 7, 20, 3, 2, 6, 17, 18, 4, 13, 14, 19];
@@ -68,5 +70,57 @@ export class SortTester {
     sorter.sort(arrayToBeSorted);
 
     expect(visitingCallback).toHaveBeenCalledTimes(numberOfVisits);
+  }
+
+  static testPropertyKeepTheSameItems(SortingClass, positiveOnly) {
+    const integerValue = positiveOnly ? fc.nat(1000) : fc.integer(-1000, 1000);
+    const sorter = new SortingClass();
+    const count = (tab, element) => tab.filter(v => v === element).length;
+    fc.assert(
+      fc.property(
+        fc.array(integerValue),
+        data => {
+          const sorted = sorter.sort(data.slice(0));
+          expect(sorted.length).toEqual(data.length);
+          for (const item of data)
+            expect(count(sorted, item)).toEqual(count(data, item));
+        }
+      )
+    );
+  }
+
+  static testPropertyOrderedArray(SortingClass, positiveOnly) {
+    const integerValue = positiveOnly ? fc.nat(1000) : fc.integer(-1000, 1000);
+    const sorter = new SortingClass();
+    fc.assert(
+      fc.property(
+        fc.array(integerValue),
+        data => {
+          const sorted = sorter.sort(data.slice(0));
+          for (let idx = 1; idx < sorted.length; ++idx)
+            expect(sorted[idx - 1]).toBeLessThanOrEqual(sorted[idx]);
+        }
+      )
+    );
+  }
+
+  static testPropertyStability(SortingClass, positiveOnly) {
+    const integerValue = positiveOnly ? fc.nat(1000) : fc.integer(-1000, 1000);
+    const callbacksA = { compareCallback: (a, b) => a[0] - b[0] };
+    const callbacksB = { compareCallback: (a, b) => a[1] - b[1] };
+    const callbacksAB = { compareCallback: (a, b) => (a[1] - b[1]) || (a[0] - b[0]) };
+    const sorterA = new SortingClass(callbacksA);
+    const sorterB = new SortingClass(callbacksB);
+    const sorterAB = new SortingClass(callbacksAB);
+    fc.assert(
+      fc.property(
+        fc.array(fc.tuple(integerValue, integerValue)),
+        data => {
+          const singleSort = sorterAB.sort(data.slice(0));
+          const sorted = sorterB.sort(sorterA.sort(data.slice(0)));
+          expect(sorted).toEqual(singleSort);
+        }
+      )
+    );
   }
 }
