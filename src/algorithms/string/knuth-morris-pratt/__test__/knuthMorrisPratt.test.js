@@ -3,6 +3,9 @@ import knuthMorrisPratt from '../knuthMorrisPratt';
 
 describe('knuthMorrisPratt', () => {
   it('should find word position in given text', () => {
+    expect(knuthMorrisPratt('', '')).toBe(0);
+    expect(knuthMorrisPratt('a', '')).toBe(0);
+    expect(knuthMorrisPratt('a', 'a')).toBe(0);
     expect(knuthMorrisPratt('abcbcglx', 'abca')).toBe(-1);
     expect(knuthMorrisPratt('abcbcglx', 'bcgl')).toBe(3);
     expect(knuthMorrisPratt('abcxabcdabxabcdabcdabcy', 'abcdabcy')).toBe(15);
@@ -22,13 +25,7 @@ describe('knuthMorrisPratt', () => {
     fc.assert(
       fc.property(
         fc.fullUnicodeString(), fc.fullUnicodeString(), fc.fullUnicodeString(),
-        (a, b, c) => {
-          // temporary workaround
-          //   as knuthMorrisPratt("", "") === -1
-          //   while knuthMorrisPratt("a", "a") === 0
-          fc.pre(b !== '');
-          return knuthMorrisPratt(a + b + c, b) !== -1;
-        }
+        (a, b, c) => knuthMorrisPratt(a + b + c, b) !== -1
       )
     );
   });
