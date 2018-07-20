@@ -27,7 +27,7 @@ describe('CountingSort', () => {
       return element > accumulator ? element : accumulator;
     }, 0);
 
-    const sortedArray = sorter.sort(notSortedArr, biggestElement);
+    const sortedArray = sorter.sort(notSortedArr, 0, biggestElement);
 
     expect(sortedArray).toEqual(sortedArr);
     // Normally visitingCallback is being called 60 times but in this case
@@ -68,10 +68,10 @@ describe('CountingSort', () => {
   });
 
   it('should contain the same items [property]', () => {
-    SortTester.testPropertyKeepTheSameItems(CountingSort, true);
+    SortTester.testPropertyKeepTheSameItems(CountingSort);
   });
 
   it('should produce ordered array [property]', () => {
-    SortTester.testPropertyOrderedArray(CountingSort, true);
+    SortTester.testPropertyOrderedArray(CountingSort);
   });
 });
