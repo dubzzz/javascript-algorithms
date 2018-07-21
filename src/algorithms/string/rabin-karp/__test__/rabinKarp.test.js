@@ -1,3 +1,5 @@
+import * as fc from 'fast-check';
+
 import { rabinKarp, hashWord, reHashWord } from '../rabinKarp';
 
 describe('rabinKarp', () => {
@@ -17,5 +19,21 @@ describe('rabinKarp', () => {
     expect(rabinKarp('abcxabcdabxabcdabcdabcy', 'abcdabca')).toBe(-1);
     expect(rabinKarp('abcxabcdabxaabcdabcabcdabcdabcy', 'abcdabca')).toBe(12);
     expect(rabinKarp('abcxabcdabxaabaabaaaabcdabcdabcy', 'aabaabaaa')).toBe(11);
+  });
+  
+  it('should find a valid word position [property]', () => {
+    fc.assert(fc.property(fc.fullUnicodeString(), fc.fullUnicodeString(), (s1, s2) => {
+      const position = rabinKarp(s1, s2);
+      return position === -1 || s1.slice(position, position + s2.length) === s2;
+    }));
+  });
+  
+  it('should find a match [property]', () => {
+    fc.assert(
+      fc.property(
+        fc.fullUnicodeString(), fc.fullUnicodeString(), fc.fullUnicodeString(),
+        (a, b, c) => rabinKarp(a + b + c, b) !== -1
+      )
+    );
   });
 });
