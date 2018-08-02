@@ -1,3 +1,4 @@
+import * as fc from 'fast-check';
 import regularExpressionMatching from '../regularExpressionMatching';
 
 describe('regularExpressionMatching', () => {
@@ -30,5 +31,48 @@ describe('regularExpressionMatching', () => {
     expect(regularExpressionMatching('ab', 'a*')).toBeFalsy();
     expect(regularExpressionMatching('abba', 'a*b*.c')).toBeFalsy();
     expect(regularExpressionMatching('abba', '.*c')).toBeFalsy();
+  });
+  it('should match on (text, pattern) pairs [property]', () => {
+    const oneC = fc.constantFrom(..."abcdefghijklmnopqrstuvwxyz");
+    const myGen = fc.array(fc.oneof(
+        fc.record({
+          type: fc.constant('exact'),
+          value: oneC
+        }),
+        fc.record({
+          type: fc.constant('all'),
+          value: oneC
+        }),
+        fc.record({
+          type: fc.constant('allNum'),
+          value: fc.stringOf(oneC)
+        }),
+        fc.record({
+          type: fc.constant('num'),
+          value: oneC,
+          num: fc.nat(10)
+        }),
+    )).map(conf => {
+        return {
+            text: conf.map(v => {
+                if (v.type === 'value') return v.value;
+                if (v.type === 'all') return v.value;
+                if (v.type === 'allNum') return v.value;
+                else return [...Array(v.num)].map(_ => v.value).join('');
+            }).join(''),
+            pattern: conf.map(v => {
+                if (v.type === 'value') return v.value;
+                if (v.type === 'all') return '.';
+                if (v.type === 'allNum') return '.*';
+                else return v.value + '*';
+            }).join('')
+        };
+    });
+
+    fc.assert(
+      fc.property(
+        myGen,
+        s => regularExpressionMatching(s.text, s.pattern)
+    ));
   });
 });
