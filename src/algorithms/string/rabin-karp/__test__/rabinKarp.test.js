@@ -1,3 +1,4 @@
+import * as fc from 'fast-check';
 import rabinKarp from '../rabinKarp';
 
 describe('rabinKarp', () => {
@@ -37,7 +38,37 @@ describe('rabinKarp', () => {
   it('should work with UTF symbols', () => {
     expect(rabinKarp('a\u{ffff}', '\u{ffff}')).toBe(1);
     expect(rabinKarp('\u0000耀\u0000', '耀\u0000')).toBe(1);
-    // @TODO: Provide Unicode support.
+    // @TODO: Provide Unicode support for characters outside of the BMP plan.
     // expect(rabinKarp('a\u{20000}', '\u{20000}')).toBe(1);
   });
+
+  // Property:
+  // for any s1, s2 strings and position = knuthMorrisPratt(s1, s2)
+  // either position is -1 corresponding to a 'no match'
+  // or position is such that s1[position : position + s2.length] === s2
+  it('should either be a no match or a valid position [property]', () => fc.assert(
+    fc.property(
+      fc.unicodeString(), fc.unicodeString(),
+      // @TODO: Provide Unicode support for characters outside of the BMP plan.
+      // @TODO: Replace previous line by the one below:
+      // fc.fullUnicodeString(), fc.fullUnicodeString(),
+      (s1, s2) => {
+        const position = rabinKarp(s1, s2);
+        return position === -1 || s1.slice(position, position + s2.length) === s2;
+      }
+    )
+  ));
+  
+  // Property:
+  // for any a, b, c strings
+  // b is a substring of a + b + c
+  it('should find a match if `word` is substring of `text` [property]', () => fc.assert(
+    fc.property(
+      fc.unicodeString(), fc.unicodeString(), fc.unicodeString(),
+      // @TODO: Provide Unicode support for characters outside of the BMP plan.
+      // @TODO: Replace previous line by the one below:
+      // fc.fullUnicodeString(), fc.fullUnicodeString(), fc.fullUnicodeString(),
+      (a, b, c) => rabinKarp(a + b + c, b) !== -1
+    )
+  ));
 });
