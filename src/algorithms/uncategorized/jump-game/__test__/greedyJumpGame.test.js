@@ -1,4 +1,6 @@
+import * as fc from 'fast-check';
 import greedyJumpGame from '../greedyJumpGame';
+import backtrackingJumpGame from '../backtrackingJumpGame';
 
 describe('greedyJumpGame', () => {
   it('should solve Jump Game problem in greedy manner', () => {
@@ -14,4 +16,13 @@ describe('greedyJumpGame', () => {
     expect(greedyJumpGame([0, 0, 0, 0, 0])).toBe(false);
     expect(greedyJumpGame([5, 4, 3, 2, 1, 0, 0])).toBe(false);
   });
+  // Property
+  // for all array of positive integers
+  // greedyJumpGame and backtrackingJumpGame should give the same result
+  it('should give the same answer as backtrackingJumpGame [property]', () => fc.assert(
+    fc.property(
+      fc.array(fc.nat(100), 100),
+      arr => greedyJumpGame(arr) === backtrackingJumpGame(arr)
+    )
+  ));
 });

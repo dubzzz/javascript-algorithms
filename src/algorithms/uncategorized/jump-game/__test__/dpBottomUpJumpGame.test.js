@@ -1,4 +1,6 @@
+import * as fc from 'fast-check';
 import dpBottomUpJumpGame from '../dpBottomUpJumpGame';
+import backtrackingJumpGame from '../backtrackingJumpGame';
 
 describe('dpBottomUpJumpGame', () => {
   it('should solve Jump Game problem in bottom-up dynamic programming manner', () => {
@@ -14,4 +16,13 @@ describe('dpBottomUpJumpGame', () => {
     expect(dpBottomUpJumpGame([0, 0, 0, 0, 0])).toBe(false);
     expect(dpBottomUpJumpGame([5, 4, 3, 2, 1, 0, 0])).toBe(false);
   });
+  // Property
+  // for all array of positive integers
+  // dpBottomUpJumpGame and backtrackingJumpGame should give the same result
+  it('should give the same answer as backtrackingJumpGame [property]', () => fc.assert(
+    fc.property(
+      fc.array(fc.nat(100), 100),
+      arr => dpBottomUpJumpGame(arr) === backtrackingJumpGame(arr)
+    )
+  ));
 });
