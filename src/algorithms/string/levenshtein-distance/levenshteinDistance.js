@@ -3,7 +3,13 @@
  * @param {string} b
  * @return {number}
  */
-export default function levenshteinDistance(a, b) {
+export default function levenshteinDistance(aRaw, bRaw) {
+  // Split strings a and b in characters
+  // In JavaScript '\u{1f431}' has a length of 2 while it is a single character
+  // Array.from(string) or [...string] can extract those characters properly
+  const a = Array.from(aRaw);
+  const b = Array.from(bRaw);
+
   // Create empty edit distance matrix for all possible modifications of
   // substrings of a to substrings of b.
   const distanceMatrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));

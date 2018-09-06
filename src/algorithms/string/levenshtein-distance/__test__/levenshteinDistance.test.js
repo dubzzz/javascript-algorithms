@@ -51,10 +51,7 @@ describe('levenshteinDistance', () => {
       fc.fullUnicodeString(),
       (aBegin, aEnd, bBegin, bEnd, common) =>
         levenshteinDistance(aBegin + common + aEnd, bBegin + common + bEnd)
-          <= Math.max(aBegin.length, bBegin.length) + Math.max(aEnd.length, bEnd.length)
-        // @TODO: Provide Unicode support for characters outside of the BMP plan.
-        // @TODO: Replace previous line by the one below:
-        //  <= Math.max([...aBegin].length, [...bBegin].length) + Math.max([...aEnd].length, [...bEnd].length)
+          <= Math.max([...aBegin].length, [...bBegin].length) + Math.max([...aEnd].length, [...bEnd].length)
     )
   ));
 });
