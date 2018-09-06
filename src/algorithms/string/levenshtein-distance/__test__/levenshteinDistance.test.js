@@ -1,3 +1,4 @@
+import * as fc from 'fast-check';
 import levenshteinDistance from '../levenshteinDistance';
 
 describe('levenshteinDistance', () => {
@@ -26,4 +27,34 @@ describe('levenshteinDistance', () => {
     // Needs to substitute the first 5 chars: INTEN by EXECU
     expect(levenshteinDistance('intention', 'execution')).toBe(5);
   });
+
+  // Property:
+  // for any a, b strings
+  // levenshteinDistance(a, b) should be equal to levenshteinDistance(b, a)
+  it('should be symmetric [property]', () => fc.assert(
+    fc.property(
+      fc.fullUnicodeString(), fc.fullUnicodeString(),
+      (a, b) => levenshteinDistance(a, b) === levenshteinDistance(b, a)
+    )
+  ));
+
+  // Property:
+  // for any aBegin, aEnd, bBegin, bEnd, common strings
+  // levenshteinDistance(
+  //     aBegin + common + aEnd,
+  //     bBegin + common + bEnd,
+  //   ) <= Math.max(aBegin.length, bBegin.length) + Math.max(aEnd.length, bEnd.length)
+  it('should not consider common string in the difference [property]', () => fc.assert(
+    fc.property(
+      fc.fullUnicodeString(), fc.fullUnicodeString(),
+      fc.fullUnicodeString(), fc.fullUnicodeString(),
+      fc.fullUnicodeString(),
+      (aBegin, aEnd, bBegin, bEnd, common) =>
+        levenshteinDistance(aBegin + common + aEnd, bBegin + common + bEnd)
+          <= Math.max(aBegin.length, bBegin.length) + Math.max(aEnd.length, bEnd.length)
+        // @TODO: Provide Unicode support for characters outside of the BMP plan.
+        // @TODO: Replace previous line by the one below:
+        //  <= Math.max([...aBegin].length, [...bBegin].length) + Math.max([...aEnd].length, [...bEnd].length)
+    )
+  ));
 });
