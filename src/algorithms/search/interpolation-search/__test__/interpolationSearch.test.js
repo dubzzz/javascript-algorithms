@@ -1,7 +1,18 @@
 import interpolationSearch from '../interpolationSearch';
 
 describe('interpolationSearch', () => {
+  /* it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer()).map(arr => [...arr].sort((a, b) => a - b)),
+        fc.integer(),
+        (arr, i) => expect(interpolationSearch(arr, i)).toBe(arr.indexOf(i))
+      )
+    )
+  }); */
   it('should search elements in sorted array of numbers', () => {
+    // expect(interpolationSearch([-1, 0, 0], 0)).toBe(1);
+    // expect(interpolationSearch([0, 3], 6)).toBe(-1);
     expect(interpolationSearch([], 1)).toBe(-1);
     expect(interpolationSearch([1], 1)).toBe(0);
     expect(interpolationSearch([1], 0)).toBe(-1);

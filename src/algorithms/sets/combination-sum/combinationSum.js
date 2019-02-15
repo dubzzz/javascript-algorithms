@@ -32,22 +32,23 @@ function combinationSumRecursive(
   // possible candidates that are left.
   for (let candidateIndex = startFrom; candidateIndex < candidates.length; candidateIndex += 1) {
     const currentCandidate = candidates[candidateIndex];
-
+    if (currentCandidate !== 0) {
     // Let's try to add another candidate.
-    currentCombination.push(currentCandidate);
+      currentCombination.push(currentCandidate);
 
-    // Explore further option with current candidate being added.
-    combinationSumRecursive(
-      candidates,
-      remainingSum - currentCandidate,
-      finalCombinations,
-      currentCombination,
-      candidateIndex,
-    );
+      // Explore further option with current candidate being added.
+      combinationSumRecursive(
+        candidates,
+        remainingSum - currentCandidate,
+        finalCombinations,
+        currentCombination,
+        candidateIndex,
+      );
 
-    // BACKTRACKING.
-    // Let's get back, exclude current candidate and try another ones later.
-    currentCombination.pop();
+      // BACKTRACKING.
+      // Let's get back, exclude current candidate and try another ones later.
+      currentCombination.pop();
+    }
   }
 
   return finalCombinations;

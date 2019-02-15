@@ -1,6 +1,16 @@
+import fc from 'fast-check';
 import binarySearch from '../binarySearch';
 
 describe('binarySearch', () => {
+  it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer()).map(arr => [...arr].sort((a, b) => a - b)),
+        fc.integer(),
+        (arr, i) => expect(binarySearch(arr, i)).toBe(arr.indexOf(i)),
+      ),
+    );
+  });
   it('should search number in sorted array', () => {
     expect(binarySearch([], 1)).toBe(-1);
     expect(binarySearch([1], 1)).toBe(0);

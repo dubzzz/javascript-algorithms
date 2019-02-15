@@ -1,6 +1,32 @@
+import fc from 'fast-check';
 import bfRainTerraces from '../bfRainTerraces';
+import dpRainTerraces from '../dpRainTerraces';
 
 describe('bfRainTerraces', () => {
+  it('equivalent', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.nat()),
+        walls => expect(bfRainTerraces(walls)).toEqual(dpRainTerraces(walls)),
+      ),
+    );
+  });
+  it('reverse', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.nat()),
+        walls => expect(dpRainTerraces(walls)).toEqual(dpRainTerraces(walls.reverse())),
+      ),
+    );
+  });
+  it('sorted', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.nat()).map(walls => [...walls].sort((a, b) => a - b)),
+        walls => expect(dpRainTerraces(walls)).toEqual(0),
+      ),
+    );
+  });
   it('should find the amount of water collected after raining', () => {
     expect(bfRainTerraces([1])).toBe(0);
     expect(bfRainTerraces([1, 0])).toBe(0);

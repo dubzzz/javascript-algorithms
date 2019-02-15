@@ -1,6 +1,23 @@
+import fc from 'fast-check';
 import dpLongestIncreasingSubsequence from '../dpLongestIncreasingSubsequence';
 
 describe('dpLongestIncreasingSubsequence', () => {
+  it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer()),
+        fc.func(fc.boolean()),
+        (data, filterFun) => {
+          const answerData = dpLongestIncreasingSubsequence(data);
+          expect(answerData).toBeLessThanOrEqual(data.length);
+
+          const subData = data.filter(filterFun);
+          const answerSubData = dpLongestIncreasingSubsequence(subData);
+          expect(answerSubData).toBeLessThanOrEqual(answerData);
+        },
+      ),
+    );
+  });
   it('should find longest increasing subsequence length', () => {
     // Should be:
     // 9 or

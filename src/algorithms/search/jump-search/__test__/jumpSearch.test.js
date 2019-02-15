@@ -1,6 +1,16 @@
+import fc from 'fast-check';
 import jumpSearch from '../jumpSearch';
 
 describe('jumpSearch', () => {
+  it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer()).map(arr => [...arr].sort((a, b) => a - b)),
+        fc.integer(),
+        (arr, i) => expect(jumpSearch(arr, i)).toBe(arr.indexOf(i)),
+      ),
+    );
+  });
   it('should search for an element in sorted array', () => {
     expect(jumpSearch([], 1)).toBe(-1);
     expect(jumpSearch([1], 2)).toBe(-1);

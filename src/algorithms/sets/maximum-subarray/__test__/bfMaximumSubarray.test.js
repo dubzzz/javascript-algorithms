@@ -1,6 +1,35 @@
+import fc from 'fast-check';
 import bfMaximumSubarray from '../bfMaximumSubarray';
+import dpMaximumSubarray from '../dpMaximumSubarray';
 
 describe('bfMaximumSubarray', () => {
+  it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer(), 1, 10),
+        fc.nat(9),
+        fc.integer(1, 10),
+        (data, rawStartIdx, size) => {
+          const startIdx = rawStartIdx % data.length;
+          const subData = data.slice(startIdx, startIdx + size);
+          expect(bfMaximumSubarray(data).reduce((a, b) => a + b, 0))
+            .toBeGreaterThanOrEqual(subData.reduce((a, b) => a + b, 0));
+        },
+      ),
+    );
+  });
+  it('prop', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer(), 1, 10),
+        (data) => {
+          expect(bfMaximumSubarray(data)).toEqual(dpMaximumSubarray(data));
+          expect(bfMaximumSubarray(data).reduce((a, b) => a + b, 0))
+            .toEqual(dpMaximumSubarray(data).reduce((a, b) => a + b, 0));
+        },
+      ),
+    );
+  });
   it('should find maximum subarray using brute force algorithm', () => {
     expect(bfMaximumSubarray([])).toEqual([]);
     expect(bfMaximumSubarray([0, 0])).toEqual([0]);

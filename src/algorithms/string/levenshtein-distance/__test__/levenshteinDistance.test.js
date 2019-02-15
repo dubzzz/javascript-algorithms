@@ -25,5 +25,18 @@ describe('levenshteinDistance', () => {
 
     // Needs to substitute the first 5 chars: INTEN by EXECU
     expect(levenshteinDistance('intention', 'execution')).toBe(5);
+    // expect(levenshteinDistance('\u{1f431}', '')).toBe(1);
   });
+
+  /* it('should not consider common string in the difference [property]', () => fc.assert(
+    fc.property(
+      fc.fullUnicodeString(), fc.fullUnicodeString(),
+      fc.fullUnicodeString(), fc.fullUnicodeString(),
+      fc.fullUnicodeString(),
+      (aBegin, aEnd, bBegin, bEnd, common) =>
+        levenshteinDistance(aBegin + common + aEnd, bBegin + common + bEnd)
+          <= Math.max([...aBegin].length, [...bBegin].length)
+          + Math.max([...aEnd].length, [...bEnd].length)
+    )
+  )); */
 });

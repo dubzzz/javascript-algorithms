@@ -1,6 +1,39 @@
+import fc from 'fast-check';
 import shortestCommonSupersequence from '../shortestCommonSupersequence';
 
 describe('shortestCommonSupersequence', () => {
+  it('prop 1', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.char()),
+        fc.array(fc.char()),
+        (a, b) => expect(shortestCommonSupersequence(a, b).length)
+          .toBe(shortestCommonSupersequence(b, a).length),
+      ),
+    );
+  });
+  it('prop 2', () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.char()),
+        fc.array(fc.char()),
+        (a, b) => {
+          const c = shortestCommonSupersequence(a, b);
+          let idxC = 0;
+          for (let idx = 0; idx !== a.length; idx += 1) {
+            idxC = c.slice(idxC).indexOf(a[idx]) + 1;
+            if (idxC === 0) return false;
+          }
+          idxC = 0;
+          for (let idx = 0; idx !== b.length; idx += 1) {
+            idxC = c.slice(idxC).indexOf(b[idx]) + 1;
+            if (idxC === 0) return false;
+          }
+          return true;
+        },
+      ),
+    );
+  });
   it('should find shortest common supersequence of two sequences', () => {
     // LCS (longest common subsequence) is empty
     expect(shortestCommonSupersequence(
